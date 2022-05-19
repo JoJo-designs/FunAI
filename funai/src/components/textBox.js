@@ -2,10 +2,12 @@ import React, { useState } from 'react';
 import Output from "./output"
 
 
+
 export default function TextBox() {
 
     // set up states
-    const [text, setText] = useState('');
+    const [ text, setText ] = useState('');
+    const [ results, setResults ] = useState('')
 
     // handleInput Sets State.
     const handleInput = (event) => {
@@ -14,8 +16,10 @@ export default function TextBox() {
         setText(inputValue)
     }
 
-    // handleSubmit make sure there is some text in the text box.
-    const checkSubmit = (event) => {
+    // handleSubmit make sure there is some text in the text box then
+    // calls for the data.
+    // Not working yet!
+    async function checkSubmit(event) {
         event.preventDefault();
 
         if (text.length === 0) {
@@ -23,9 +27,18 @@ export default function TextBox() {
             return
         }
         console.log(text)
+        const response = await fetch("/components/api/generate.js", {
+            method: "POST",
+            header: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({prompt: text}),
+        });
+        const data = await response.json()
+        console.log(data)
     }
 
-    // 
+  
 
     return (
         <div>
